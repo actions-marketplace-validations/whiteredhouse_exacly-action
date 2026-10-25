@@ -5,7 +5,7 @@ description = "The GitHub Action that validates Exacly models and comments their
 requires-python = ">=3.12"
 # The exacly release the action runs. Bump it, and release the action, for each exacly release.
 dependencies = [
-    "exacly @ git+https://github.com/whiteredhouse/exacly@python-v0.2.0",
+    "exacly==0.2.1",
 ]
 
 [dependency-groups]

@@ -90,11 +90,15 @@ wheels = [
 
 [[package]]
 name = "exacly"
-version = "0.2.0"
-source = { git = "https://github.com/whiteredhouse/exacly?rev=python-v0.2.0#323c293a9929b0936167ee54d3bb1bb3f1b97224" }
+version = "0.2.1"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jsonschema" },
     { name = "pyyaml" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/9b/8d/6c188f28f15e07f771dd0145dd38d35e95e3e26237eec03f620569fac903/exacly-0.2.1.tar.gz", hash = "sha256:c264565e8104884d1d9f7c3c66928ee35d4a1a4fe2b11e421e9dbce6fcf41e42", size = 54703, upload-time = "2026-10-25T18:01:04.446Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/38/cf/56d43741c7fd4e3002c277de694eab42deb4a874073d358acb2a79fd85c5/exacly-0.2.1-py3-none-any.whl", hash = "sha256:c073b5feda37734b09ec1821edb9211b0aaecf1bcda20c5736c887ff3745ecdf", size = 57555, upload-time = "2026-10-25T18:01:03.221Z" },
 ]
 
 [[package]]
@@ -114,7 +118,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "exacly", git = "https://github.com/whiteredhouse/exacly?rev=python-v0.2.0" }]
+requires-dist = [{ name = "exacly", specifier = "==0.2.1" }]
 
 [package.metadata.requires-dev]
 dev = [
