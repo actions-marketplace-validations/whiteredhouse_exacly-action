@@ -89,11 +89,20 @@ wheels = [
 ]
 
 [[package]]
+name = "exacly"
+version = "0.2.0"
+source = { git = "https://github.com/whiteredhouse/exacly?rev=python-v0.2.0#323c293a9929b0936167ee54d3bb1bb3f1b97224" }
+dependencies = [
+    { name = "jsonschema" },
+    { name = "pyyaml" },
+]
+
+[[package]]
 name = "exacly-action"
-version = "0.1.0"
+version = "0.2.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "exacly-validate" },
+    { name = "exacly" },
 ]
 
 [package.dev-dependencies]
@@ -105,7 +114,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "exacly-validate", git = "https://github.com/whiteredhouse/exacly?rev=validator-v0.1.0" }]
+requires-dist = [{ name = "exacly", git = "https://github.com/whiteredhouse/exacly?rev=python-v0.2.0" }]
 
 [package.metadata.requires-dev]
 dev = [
@@ -113,15 +122,6 @@ dev = [
     { name = "pytest", specifier = ">=9.1.1" },
     { name = "ruff" },
     { name = "types-pyyaml" },
-]
-
-[[package]]
-name = "exacly-validate"
-version = "0.1.0"
-source = { git = "https://github.com/whiteredhouse/exacly?rev=validator-v0.1.0#723f7c6d725dc389708b31bf347d233a071c2695" }
-dependencies = [
-    { name = "jsonschema" },
-    { name = "pyyaml" },
 ]
 
 [[package]]

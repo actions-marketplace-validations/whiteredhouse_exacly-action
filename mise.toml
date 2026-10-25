@@ -6,7 +6,7 @@ uv = "0.11.32"
 shellcheck = "0.11.0"
 
 [tasks.sync]
-description = "Install the validator and development tools into .venv from uv.lock"
+description = "Install exacly and development tools into .venv from uv.lock"
 run = "uv sync --locked"
 
 [tasks.test]

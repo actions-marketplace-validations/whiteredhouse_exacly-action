@@ -79,7 +79,7 @@ def test_inputs_reach_scripts_only_through_the_environment() -> None:
         assert script.read_text().startswith("#!/usr/bin/env bash\nset -euo pipefail\n")
 
 
-def test_the_validator_is_installed_from_the_lock_without_development_tools() -> None:
+def test_exacly_is_installed_from_the_lock_without_development_tools() -> None:
     script = (ROOT / "scripts" / "install.sh").read_text()
     assert 'uv sync --project "$ACTION_PATH" --locked --no-dev' in script
     assert "check | plan" in script
@@ -127,7 +127,7 @@ def test_patterns_are_matched_against_each_revision() -> None:
         assert "| - | `REQ-001` |" in plan
 
 
-def test_an_unknown_mode_fails_before_installing_the_validator() -> None:
+def test_an_unknown_mode_fails_before_installing_exacly() -> None:
     with tempfile.TemporaryDirectory() as folder:
         temp = Path(folder)
         # Execute the real install script while pointing its project at a nonexistent checkout.
@@ -142,17 +142,17 @@ def test_an_unknown_mode_fails_before_installing_the_validator() -> None:
         assert "mode is check or plan" in done.stdout
 
 
-def test_installing_the_validator_does_not_install_development_tools() -> None:
+def test_installing_exacly_does_not_install_development_tools() -> None:
     with tempfile.TemporaryDirectory() as folder:
         temp = Path(folder)
         venv = temp / "venv"
-        done = run("Install the validator", temp, temp, MODE="check", UV_PROJECT_ENVIRONMENT=str(venv))
+        done = run("Install exacly", temp, temp, MODE="check", UV_PROJECT_ENVIRONMENT=str(venv))
         assert done.returncode == 0, done.stderr
         installed = subprocess.run(
             [
                 str(venv / "bin" / "python"),
                 "-c",
-                "import exacly_validate, jsonschema, yaml; "
+                "import exacly, jsonschema, yaml; "
                 "from importlib.util import find_spec; assert find_spec('pytest') is None",
             ],
             cwd=temp,
