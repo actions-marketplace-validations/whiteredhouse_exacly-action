@@ -1,5 +1,5 @@
 # Exacly for other repositories' workflows: `uses: whiteredhouse/exacly-action@v0`.
-# Installs the exacly-validate release pinned in pyproject.toml, from uv.lock.
+# Installs the exacly release pinned in pyproject.toml, from uv.lock.
 name: Exacly
 description: Validate an Exacly model, or comment a pull request's change plan.
 author: whiteredhouse
@@ -37,7 +37,7 @@ runs:
         version: "0.11.32"
         enable-cache: false
 
-    - name: Install the validator
+    - name: Install exacly
       shell: bash
       env:
         ACTION_PATH: ${{ github.action_path }}

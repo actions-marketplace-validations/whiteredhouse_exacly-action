@@ -1,11 +1,11 @@
 [project]
 name = "exacly-action"
-version = "0.1.0"
+version = "0.2.0"
 description = "The GitHub Action that validates Exacly models and comments their change plans"
 requires-python = ">=3.12"
-# The validator release the action runs. Bump it, and release the action, for each validator release.
+# The exacly release the action runs. Bump it, and release the action, for each exacly release.
 dependencies = [
-    "exacly-validate @ git+https://github.com/whiteredhouse/exacly@validator-v0.1.0",
+    "exacly==0.2.1",
 ]
 
 [dependency-groups]
@@ -17,7 +17,7 @@ dev = [
 ]
 
 [tool.uv]
-# The action is scripts around the validator, not a package of its own.
+# The action is scripts around exacly, not a package of its own.
 package = false
 
 [tool.ruff]

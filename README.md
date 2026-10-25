@@ -47,11 +47,12 @@ CI runs `check` on GitHub-hosted Linux and macOS runners, and `plan` on Linux. T
 
 ## Versions
 
-Pin a tag: `v0.1.0`, or the moving `v0` for the latest 0.x release. Each action release runs one release of `exacly-validate`, pinned in [`pyproject.toml`](pyproject.toml) and installed from [`uv.lock`](uv.lock), so a release always validates the same way.
+Pin a tag: `v0.1.0`, or the moving `v0` for the latest 0.x release. Each action release runs one release of the `exacly` package, pinned in [`pyproject.toml`](pyproject.toml) and installed from [`uv.lock`](uv.lock), so a release always validates the same way.
 
-| Action | exacly-validate | Spec versions it reads |
+| Action | exacly | Spec versions it reads |
 | --- | --- | --- |
-| 0.1.0 | 0.1.0 | 0.1, 0.2 |
+| 0.1.0 | 0.1.0 (as `exacly-validate`) | 0.1, 0.2 |
+| 0.2.0 | 0.2.1, from PyPI | 0.1, 0.2 |
 
 ## Development
 
