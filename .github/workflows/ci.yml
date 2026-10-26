@@ -33,6 +33,8 @@ jobs:
           mkdir -p "$RUNNER_TEMP/exacly-consumer"
           cp -R tests/model "$RUNNER_TEMP/exacly-consumer/model"
           cp tests/verification.json "$RUNNER_TEMP/exacly-consumer/model/verification.json"
+          cp tests/policy.yaml tests/target.json "$RUNNER_TEMP/exacly-consumer/"
+          printf 'name: delivery-required\nversion: "1"\nrequirements:\n  - record: REQ-001\n    dimensions: [delivery]\n' > "$RUNNER_TEMP/exacly-consumer/blocked-policy.yaml"
           printf 'exacly: 0.2.0\nrecords: [{id: OUT-001}]\n' > "$RUNNER_TEMP/exacly-consumer/invalid.yaml"
       - name: Validate the consumer model
         uses: ./
@@ -53,6 +55,32 @@ jobs:
           set -euo pipefail
           test "$OUTCOME" = failure
           grep -F "Result: does not conform" "$RUNNER_TEMP/exacly-report.txt"
+
+      - name: Accept satisfied readiness
+        uses: ./
+        with:
+          mode: gate
+          model: ${{ runner.temp }}/exacly-consumer/model
+          policy: ${{ runner.temp }}/exacly-consumer/policy.yaml
+          target: ${{ runner.temp }}/exacly-consumer/target.json
+      - name: Reject unknown readiness
+        id: blocked
+        continue-on-error: true
+        uses: ./
+        with:
+          mode: gate
+          model: ${{ runner.temp }}/exacly-consumer/model
+          policy: ${{ runner.temp }}/exacly-consumer/blocked-policy.yaml
+          target: ${{ runner.temp }}/exacly-consumer/target.json
+      - name: Verify that unknown readiness blocked the job
+        if: always()
+        shell: bash
+        env:
+          OUTCOME: ${{ steps.blocked.outcome }}
+        run: |
+          set -euo pipefail
+          test "$OUTCOME" = failure
+          grep -F "Result: unknown" "$RUNNER_TEMP/exacly-gate.txt"
 
   plan:
     # The plan for this repository's test model, commented on pull requests from this repository.

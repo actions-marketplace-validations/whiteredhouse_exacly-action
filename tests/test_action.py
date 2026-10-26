@@ -59,10 +59,12 @@ def consumer(folder: Path) -> Path:
 
 def test_inputs_and_modes() -> None:
     assert ACTION["runs"]["using"] == "composite"
-    assert set(ACTION["inputs"]) == {"mode", "model", "base", "token"}
+    assert set(ACTION["inputs"]) == {"mode", "model", "base", "token", "policy", "target"}
     assert ACTION["inputs"]["mode"]["default"] == "check"
     assert STEPS["Validate the model"]["if"] == "inputs.mode == 'check'"
     assert STEPS["Write the plan"]["if"] == "inputs.mode == 'plan'"
+    assert STEPS["Evaluate readiness"]["if"] == "inputs.mode == 'gate'"
+    assert all(ACTION["inputs"][field]["default"] == "" for field in ("policy", "target"))
     assert (
         "github.event.pull_request.head.repo.full_name == github.repository"
         in (STEPS["Comment the plan, replacing the earlier one"]["if"])
@@ -140,7 +142,7 @@ def test_an_unknown_mode_fails_before_installing_exacly() -> None:
             text=True,
         )
         assert done.returncode == 1
-        assert "mode is check or plan" in done.stdout
+        assert "mode is check, plan or gate" in done.stdout
 
 
 def test_installing_exacly_does_not_install_development_tools() -> None:
