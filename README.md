@@ -49,10 +49,10 @@ CI runs `check` and `gate` on GitHub-hosted Linux and macOS runners, and `plan` 
 
 ## Gate readiness
 
-Gate mode is available on `main` and will ship in the next tagged action release. The current `v0.4.0` release supports `check` and `plan` only.
+Gate mode is available from `v0.5.0`. Earlier action releases support `check` and `plan` only.
 
 ```yaml
-- uses: whiteredhouse/exacly-action@main
+- uses: whiteredhouse/exacly-action@v0.5.0
   with:
     mode: gate
     model: |
@@ -80,7 +80,7 @@ The action reads supplied observations; it does not run tests, refresh state, de
 
 ## Versions
 
-Pin a tag: `v0.4.0`, or the moving `v0` for the latest 0.x release. Each action release runs one release of the `exacly` package, pinned in [`pyproject.toml`](pyproject.toml) and installed from [`uv.lock`](uv.lock), so a release always validates the same way.
+Pin a tag: `v0.5.0`, or the moving `v0` for the latest 0.x release. Each action release runs one release of the `exacly` package, pinned in [`pyproject.toml`](pyproject.toml) and installed from [`uv.lock`](uv.lock), so a release always validates the same way.
 
 | Action | exacly | Spec versions it reads |
 | --- | --- | --- |
@@ -88,6 +88,7 @@ Pin a tag: `v0.4.0`, or the moving `v0` for the latest 0.x release. Each action 
 | 0.2.0 | 0.2.1, from PyPI | 0.1, 0.2 |
 | 0.3.0 | 0.3.0 | 0.1, 0.2 |
 | 0.4.0 | 0.4.0 | 0.1, 0.2 |
+| 0.5.0: opt-in readiness gates | 0.4.0 | 0.1, 0.2 |
 
 The 0.4.0 action accepts supported verification before delivery and state with structured assessment subjects. It retains the existing inputs and the `check` and `plan` modes; it does not expose `assess` or `gate` modes.
 
