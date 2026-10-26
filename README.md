@@ -53,6 +53,7 @@ Pin a tag: `v0.1.0`, or the moving `v0` for the latest 0.x release. Each action 
 | --- | --- | --- |
 | 0.1.0 | 0.1.0 (as `exacly-validate`) | 0.1, 0.2 |
 | 0.2.0 | 0.2.1, from PyPI | 0.1, 0.2 |
+| 0.3.0 | 0.3.0 | 0.1, 0.2 |
 
 ## Development
 
