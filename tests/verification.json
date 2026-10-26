@@ -1,0 +1,35 @@
+{
+  "exacly": "0.2.0",
+  "namespace": "invoicing",
+  "context": "ci",
+  "config_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "serial": 1,
+  "lineage": "a50bbca3-bfd2-4e3e-a0e1-5b6d6037031e",
+  "written_at": "2026-10-26T12:00:00Z",
+  "records": {
+    "REQ-001": {
+      "assessments": [
+        {
+          "dimension": "verification",
+          "state": "passed",
+          "context": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "at": "2026-10-26T12:00:00Z",
+          "source": "tests",
+          "subject": {
+            "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "evidence": [
+            {
+              "locator": "https://ci.example/runs/1",
+              "kind": "test",
+              "claim": "The bound reminder tests passed",
+              "observed_at": "2026-10-26",
+              "applies_to": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
