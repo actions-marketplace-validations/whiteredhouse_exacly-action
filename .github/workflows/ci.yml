@@ -82,6 +82,45 @@ jobs:
           test "$OUTCOME" = failure
           grep -F "Result: unknown" "$RUNNER_TEMP/exacly-gate.txt"
 
+      - name: Observe mixed passing and skipped consumer tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          uv run --project "$GITHUB_WORKSPACE" --no-dev --no-sync python - "$RUNNER_TEMP/exacly-consumer/model/billing.yaml" <<'PY'
+          import sys
+          from pathlib import Path
+          import yaml
+          path = Path(sys.argv[1])
+          document = yaml.safe_load(path.read_text())
+          requirement = next(r for r in document["records"] if r["id"] == "REQ-001")
+          requirement["observe"]["tests"] = {"cases": ["billing::first", "billing::second"]}
+          path.write_text(yaml.safe_dump(document))
+          PY
+          uv run --project "$GITHUB_WORKSPACE" --no-dev --no-sync exacly refresh \
+            "$RUNNER_TEMP/exacly-consumer/model" --context ci \
+            --revision aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa \
+            --state "$RUNNER_TEMP/exacly-consumer/model/verification.json" \
+            --junit tests/mixed-execution.xml
+      - name: Reject incomplete verification
+        id: incomplete
+        continue-on-error: true
+        uses: ./
+        with:
+          mode: gate
+          model: ${{ runner.temp }}/exacly-consumer/model
+          policy: ${{ runner.temp }}/exacly-consumer/policy.yaml
+          target: ${{ runner.temp }}/exacly-consumer/target.json
+      - name: Verify that mixed execution blocked the job
+        if: always()
+        shell: bash
+        env:
+          OUTCOME: ${{ steps.incomplete.outcome }}
+        run: |
+          set -euo pipefail
+          test "$OUTCOME" = failure
+          grep -F "Result: unknown" "$RUNNER_TEMP/exacly-gate.txt"
+          grep -F "inconclusive" "$RUNNER_TEMP/exacly-gate.txt"
+
   plan:
     # The plan for this repository's test model, commented on pull requests from this repository.
     if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository

@@ -1,0 +1,6 @@
+<testsuite name="billing">
+  <testcase classname="billing" name="first"/>
+  <testcase classname="billing" name="second">
+    <skipped message="prerequisite unavailable"/>
+  </testcase>
+</testsuite>

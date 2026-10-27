@@ -8,6 +8,7 @@ import tempfile
 from pathlib import Path
 
 import pytest
+import yaml
 from test_action import ROOT, consumer, run
 
 
@@ -99,3 +100,73 @@ def test_gate_requires_policy_and_target_before_installing(policy: str, target: 
         )
         assert done.returncode == 2
         assert "gate requires policy and target" in done.stdout
+
+
+@pytest.mark.parametrize("cases", [["billing::first", "billing::second"], ["billing::*"]])
+@pytest.mark.parametrize(
+    ("outcomes", "state_result", "exit_code", "gate_result"),
+    [
+        (("passed", "passed"), "passed", 0, "satisfied"),
+        (("passed", "skipped"), "inconclusive", 1, "unknown"),
+        (("failed", "skipped"), "failed", 1, "not_satisfied"),
+        (("skipped", "skipped"), "not_checked", 1, "unknown"),
+    ],
+)
+def test_refreshed_case_outcomes_reach_the_action_gate(
+    cases: list[str], outcomes: tuple[str, str], state_result: str, exit_code: int, gate_result: str
+) -> None:
+    with tempfile.TemporaryDirectory() as folder:
+        temp = Path(folder)
+        repo = consumer(temp)
+        policy, target, state = inputs(repo)
+        billing = repo / "model" / "billing.yaml"
+        document = yaml.safe_load(billing.read_text())
+        requirement = next(r for r in document["records"] if r["id"] == "REQ-001")
+        requirement["observe"]["tests"] = {"cases": cases}
+        billing.write_text(yaml.safe_dump(document))
+        junit = temp / "junit.xml"
+        tags = {"passed": "", "skipped": "<skipped/>", "failed": "<failure/>"}
+        junit.write_text(
+            '<testsuite><testcase classname="billing" name="first">'
+            + tags[outcomes[0]]
+            + '</testcase><testcase classname="billing" name="second">'
+            + tags[outcomes[1]]
+            + "</testcase></testsuite>"
+        )
+        revision = "a" * 40
+        refreshed = subprocess.run(
+            [
+                "uv",
+                "run",
+                "--project",
+                str(ROOT),
+                "--no-dev",
+                "--no-sync",
+                "exacly",
+                "refresh",
+                "model",
+                "--context",
+                "ci",
+                "--revision",
+                revision,
+                "--state",
+                str(state),
+                "--junit",
+                str(junit),
+            ],
+            cwd=repo,
+            capture_output=True,
+            text=True,
+        )
+        assert refreshed.returncode == 0, refreshed.stdout + refreshed.stderr
+        assessment = json.loads(state.read_text())["records"]["REQ-001"]["assessments"][0]
+        assert assessment["state"] == state_result
+        if state_result == "inconclusive":
+            assert "billing::second" in assessment["reason"]
+            assert assessment["evidence"]
+        before = state.read_bytes()
+        done = run("Evaluate readiness", repo, temp, MODEL="model", POLICY=str(policy), TARGET=str(target))
+        assert done.returncode == exit_code, done.stdout + done.stderr
+        assert f"Result: {gate_result}" in done.stdout
+        assert done.stdout in (temp / "summary.md").read_text()
+        assert state.read_bytes() == before
