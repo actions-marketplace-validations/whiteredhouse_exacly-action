@@ -1,0 +1,5 @@
+name: consumer-verification
+version: '1'
+requirements:
+  - record: REQ-001
+    dimensions: [verification]

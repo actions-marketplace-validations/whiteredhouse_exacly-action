@@ -1,7 +1,7 @@
 # Exacly for other repositories' workflows: `uses: whiteredhouse/exacly-action@v0`.
 # Installs the exacly release pinned in pyproject.toml, from uv.lock.
 name: Exacly
-description: Validate an Exacly model, or comment a pull request's change plan.
+description: Validate an Exacly model, enforce readiness, or comment a pull request's change plan.
 author: whiteredhouse
 branding:
   icon: check-square
@@ -12,13 +12,20 @@ inputs:
     description: >-
       check: validate the model and fail when it doesn't conform. plan: write the change plan against the pull
       request's base branch to the job summary and, for pull requests from the same repository, as a comment
-      that each run replaces (needs pull-requests: write).
+      that each run replaces (needs pull-requests: write). gate: require a readiness policy to be satisfied
+      for an explicit target (requires policy and target inputs).
     default: check
   model:
     description: >-
       The model's config and state, as files, folders or patterns such as spec/exacly/*.yaml, one per line or
       separated by spaces.
     default: spec/exacly
+  policy:
+    description: "gate: path to the readiness policy YAML/JSON file, required in gate mode."
+    default: ""
+  target:
+    description: "gate: path to the explicit assessment target YAML/JSON file, required in gate mode."
+    default: ""
   base:
     description: "plan: the branch the change is against. Default: the pull request's base branch."
     default: ""
@@ -42,6 +49,8 @@ runs:
       env:
         ACTION_PATH: ${{ github.action_path }}
         MODE: ${{ inputs.mode }}
+        POLICY: ${{ inputs.policy }}
+        TARGET: ${{ inputs.target }}
       run: 'source "$ACTION_PATH/scripts/install.sh"'
 
     - name: Validate the model
@@ -51,6 +60,16 @@ runs:
         ACTION_PATH: ${{ github.action_path }}
         MODEL: ${{ inputs.model }}
       run: 'source "$ACTION_PATH/scripts/validate.sh"'
+
+    - name: Evaluate readiness
+      if: inputs.mode == 'gate'
+      shell: bash
+      env:
+        ACTION_PATH: ${{ github.action_path }}
+        MODEL: ${{ inputs.model }}
+        POLICY: ${{ inputs.policy }}
+        TARGET: ${{ inputs.target }}
+      run: 'source "$ACTION_PATH/scripts/gate.sh"'
 
     - name: Write the plan
       if: inputs.mode == 'plan'

@@ -1,11 +1,11 @@
 [project]
 name = "exacly-action"
-version = "0.3.0"
+version = "0.5.0"
 description = "The GitHub Action that validates Exacly models and comments their change plans"
 requires-python = ">=3.12"
 # The exacly release the action runs. Bump it, and release the action, for each exacly release.
 dependencies = [
-    "exacly==0.3.0",
+    "exacly==0.4.0",
 ]
 
 [dependency-groups]

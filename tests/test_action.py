@@ -13,6 +13,7 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
+import pytest
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -58,10 +59,12 @@ def consumer(folder: Path) -> Path:
 
 def test_inputs_and_modes() -> None:
     assert ACTION["runs"]["using"] == "composite"
-    assert set(ACTION["inputs"]) == {"mode", "model", "base", "token"}
+    assert set(ACTION["inputs"]) == {"mode", "model", "base", "token", "policy", "target"}
     assert ACTION["inputs"]["mode"]["default"] == "check"
     assert STEPS["Validate the model"]["if"] == "inputs.mode == 'check'"
     assert STEPS["Write the plan"]["if"] == "inputs.mode == 'plan'"
+    assert STEPS["Evaluate readiness"]["if"] == "inputs.mode == 'gate'"
+    assert all(ACTION["inputs"][field]["default"] == "" for field in ("policy", "target"))
     assert (
         "github.event.pull_request.head.repo.full_name == github.repository"
         in (STEPS["Comment the plan, replacing the earlier one"]["if"])
@@ -139,7 +142,7 @@ def test_an_unknown_mode_fails_before_installing_exacly() -> None:
             text=True,
         )
         assert done.returncode == 1
-        assert "mode is check or plan" in done.stdout
+        assert "mode is check, plan or gate" in done.stdout
 
 
 def test_installing_exacly_does_not_install_development_tools() -> None:
@@ -201,3 +204,20 @@ def test_comment_lookup_drains_paginated_duplicates_before_updating_the_first() 
             "-F",
             f"body=@{plan}",
         ]
+
+
+@pytest.mark.parametrize("structured_subject", [False, True])
+def test_check_and_plan_accept_verification_before_delivery(structured_subject: bool) -> None:
+    with tempfile.TemporaryDirectory() as folder:
+        temp = Path(folder)
+        repo = consumer(temp)
+        observed = json.loads((ROOT / "tests" / "verification.json").read_text())
+        if not structured_subject:
+            observed["records"]["REQ-001"]["assessments"][0].pop("subject")
+        (repo / "model" / "verification.json").write_text(json.dumps(observed))
+        checked = run("Validate the model", repo, temp, MODEL="model")
+        assert checked.returncode == 0, checked.stdout + checked.stderr
+        assert "Result: conforms" in checked.stdout
+        planned = run("Write the plan", repo, temp, MODEL="model", BASE="main")
+        assert planned.returncode == 0, planned.stdout + planned.stderr
+        assert "Validation: **conforms**" in (temp / "exacly-plan.md").read_text()
