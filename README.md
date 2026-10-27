@@ -52,7 +52,7 @@ CI runs `check` and `gate` on GitHub-hosted Linux and macOS runners, and `plan` 
 Gate mode is available from `v0.5.0`. Earlier action releases support `check` and `plan` only.
 
 ```yaml
-- uses: whiteredhouse/exacly-action@v0.5.0
+- uses: whiteredhouse/exacly-action@v0.6.0
   with:
     mode: gate
     model: |
@@ -80,7 +80,7 @@ The action reads supplied observations; it does not run tests, refresh state, de
 
 ## Versions
 
-Pin a tag: `v0.5.0`, or the moving `v0` for the latest 0.x release. Each action release runs one release of the `exacly` package, pinned in [`pyproject.toml`](pyproject.toml) and installed from [`uv.lock`](uv.lock), so a release always validates the same way.
+Pin a tag: `v0.6.0`, or the moving `v0` for the latest 0.x release. Each action release runs one release of the `exacly` package, pinned in [`pyproject.toml`](pyproject.toml) and installed from [`uv.lock`](uv.lock), so a release always validates the same way.
 
 | Action | exacly | Spec versions it reads |
 | --- | --- | --- |
@@ -89,6 +89,13 @@ Pin a tag: `v0.5.0`, or the moving `v0` for the latest 0.x release. Each action 
 | 0.3.0 | 0.3.0 | 0.1, 0.2 |
 | 0.4.0 | 0.4.0 | 0.1, 0.2 |
 | 0.5.0: opt-in readiness gates | 0.4.0 | 0.1, 0.2 |
+| 0.6.0: conservative case-bound verification | 0.5.0 | 0.1, 0.2 |
+
+### Upgrading to 0.6.0
+
+This release runs exacly 0.5.0. When that observer sees a mix of passing and skipped selected test cases, it writes `inconclusive` verification with evidence and a reason naming skipped cases. A verification gate returns `unknown` and exits 1 for that result. Failures still take precedence, all-skipped selections remain `not_checked`, and all-pass selections can still satisfy readiness. Pytest expected failures (`xfail`) are skipped outcomes in JUnit reports, so broad bindings that include them may now block readiness.
+
+Upgrade the tooling that runs `exacly refresh` to 0.5.0 and reobserve affected bindings. Updating the action alone does not reinterpret historical `passed` state: the action reads supplied observations and never refreshes them. Job-only bindings and duplicate-case-ID merging keep their existing semantics. The action's inputs, modes, and specification compatibility are unchanged.
 
 The 0.4.0 action accepts supported verification before delivery and state with structured assessment subjects. It retains the existing inputs and the `check` and `plan` modes; it does not expose `assess` or `gate` modes.
 
