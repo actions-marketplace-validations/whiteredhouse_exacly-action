@@ -93,20 +93,23 @@ Pin a stable tag: `v0.6.0`, or the moving `v0` for the latest stable 0.x release
 | 0.7.0-rc.1 (prerelease): compatibility with the package RC | 0.6.0rc1 | 0.1, 0.2 |
 | 0.7.0-rc.2 (prerelease): compatibility with package RC2 | 0.6.0rc2 | 0.1, 0.2 |
 | 0.7.0-rc.3 (prerelease): compatibility with package RC3 | 0.6.0rc3 | 0.1, 0.2 |
+| 0.7.0-rc.4 (prerelease): compatibility with package RC4 | 0.6.0rc4 | 0.1, 0.2 |
 
-### Try 0.7.0-rc.3
+### Try 0.7.0-rc.4
 
-This opt-in prerelease runs the published `exacly==0.6.0rc3` package. Action and package versions are independent. Select the action's exact prerelease tag to test an existing workflow with RC3:
+This opt-in prerelease runs the published `exacly==0.6.0rc4` package. Action and package versions are independent. Select the action's exact prerelease tag to test an existing workflow with RC4:
 
 ```yaml
-- uses: whiteredhouse/exacly-action@v0.7.0-rc.3
+- uses: whiteredhouse/exacly-action@v0.7.0-rc.4
   with:
     model: spec/exacly
 ```
 
-The available modes remain `check`, `plan` and `gate`, with the same inputs. The action's `plan` mode runs `exacly view plan` for a pull request's model changes. The package's verification planner, evidence admission, reconciliation, execution ledger and local completion commands are available through the [CLI](https://github.com/whiteredhouse/exacly/blob/python-v0.6.0rc3/python/README.md), without new action modes in this release.
+The available modes remain `check`, `plan` and `gate`, with the same inputs. The action's `plan` mode runs `exacly view plan` for a pull request's model changes. The package's verification planner, evidence admission, reconciliation, execution ledger and local completion commands are available through the [CLI](https://github.com/whiteredhouse/exacly/blob/python-v0.6.0rc4/python/README.md), without new action modes in this release.
 
-Package RC3 adds installed `exacly evidence package` and `exacly evidence propose-policy github-actions` commands for producer bundles and candidate trust policies. These remain CLI commands; creating a candidate does not approve it, and the action adds no packaging, policy-drafting, admission or completion mode. RC3 retains RC2's explicit branch-protection policy option and earlier documentation corrections. See the [package release notes](https://github.com/whiteredhouse/exacly/releases/tag/python-v0.6.0rc3) for receipt formats and ledger upgrade guidance.
+Package RC4 initializes new execution ledgers in completion-ready schema version 2 and creates admission bundle files with mode `0600` inside a `0700` directory. Existing ledgers keep their format, and indexed version-4 activation remains explicit. These changes apply to the CLI; the action's validation modes do not create ledgers or admission bundles.
+
+RC4 retains the installed `exacly evidence package` and `exacly evidence propose-policy github-actions` commands for producer bundles and candidate trust policies. Creating a candidate still requires independent approval before use. See the [package release notes](https://github.com/whiteredhouse/exacly/releases/tag/python-v0.6.0rc4) for receipt formats and ledger upgrade guidance.
 
 The stable `v0` tag continues to select action `v0.6.0`, which runs package `0.5.0`.
 
