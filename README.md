@@ -80,7 +80,7 @@ The action reads supplied observations; it does not run tests, refresh state, de
 
 ## Versions
 
-Pin a tag: `v0.6.0`, or the moving `v0` for the latest 0.x release. Each action release runs one release of the `exacly` package, pinned in [`pyproject.toml`](pyproject.toml) and installed from [`uv.lock`](uv.lock), so a release always validates the same way.
+Pin a stable tag: `v0.6.0`, or the moving `v0` for the latest stable 0.x release. Prereleases require an explicit tag and do not move `v0`. Each action release runs one release of the `exacly` package, pinned in [`pyproject.toml`](pyproject.toml) and installed from [`uv.lock`](uv.lock), so a release always validates the same way.
 
 | Action | exacly | Spec versions it reads |
 | --- | --- | --- |
@@ -90,6 +90,21 @@ Pin a tag: `v0.6.0`, or the moving `v0` for the latest 0.x release. Each action 
 | 0.4.0 | 0.4.0 | 0.1, 0.2 |
 | 0.5.0: opt-in readiness gates | 0.4.0 | 0.1, 0.2 |
 | 0.6.0: conservative case-bound verification | 0.5.0 | 0.1, 0.2 |
+| 0.7.0-rc.1 (prerelease): compatibility with the package RC | 0.6.0rc1 | 0.1, 0.2 |
+
+### Try 0.7.0-rc.1
+
+This opt-in prerelease runs the published `exacly==0.6.0rc1` package. Action and package versions are independent. Select the action's exact prerelease tag to test an existing workflow with the RC:
+
+```yaml
+- uses: whiteredhouse/exacly-action@v0.7.0-rc.1
+  with:
+    model: spec/exacly
+```
+
+The available modes remain `check`, `plan` and `gate`, with the same inputs. The action's `plan` mode runs `exacly view plan` for a pull request's model changes. The package's new top-level verification planner, evidence admission, reconciliation, execution ledger and local completion commands are available through the [CLI](https://github.com/whiteredhouse/exacly/blob/python-v0.6.0rc1/python/README.md), without new action modes in this release. The CLI reference's [documentation errata](https://github.com/whiteredhouse/exacly/releases/tag/python-v0.6.0rc1) are recorded in the package release notes.
+
+The stable `v0` tag continues to select action `v0.6.0`, which runs package `0.5.0`.
 
 ### Upgrading to 0.6.0
 
