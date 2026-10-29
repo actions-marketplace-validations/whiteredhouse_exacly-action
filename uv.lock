@@ -90,20 +90,20 @@ wheels = [
 
 [[package]]
 name = "exacly"
-version = "0.6.0rc4"
+version = "0.6.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jsonschema" },
     { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/3c/28/5aeb0b862c8efb8f47bf42a744c4dc105f786cdd267d3918d2ccec72cbe8/exacly-0.6.0rc4.tar.gz", hash = "sha256:40ffcb6a6cc8362e77d6957fa5743fd1270391a60db67692b03d47ec5879ddb6", size = 209864, upload-time = "2026-10-29T20:51:46.851Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b2/b9/976b88f63812b343c1b468348195b17810777a59208e578bd5bbbbe972ee/exacly-0.6.0.tar.gz", hash = "sha256:515765f8231b277a9b45a66505c352bcf952d9350024520752754dbf25318ccc", size = 210734, upload-time = "2026-10-29T22:46:14.902Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/99/e6/a063c37d571b220885de506a8a97aa26c259dc3bc3651f5a1b6a7ad73cdb/exacly-0.6.0rc4-py3-none-any.whl", hash = "sha256:e2dd08d03a0f9bc843e0e1bf20cac6b564544da075144bc2ab7198bdbc670965", size = 210969, upload-time = "2026-10-29T20:51:45.43Z" },
+    { url = "https://files.pythonhosted.org/packages/99/84/983a2dcf71c9cc02bc54c946cfd2242ae93a6eb021a29f207b9b3ddbc0a4/exacly-0.6.0-py3-none-any.whl", hash = "sha256:eb3f2c663e23c9bf55b3363dc1817d1ac90a09fa2dc3ce6bc56e67bc90bede17", size = 211354, upload-time = "2026-10-29T22:46:13.052Z" },
 ]
 
 [[package]]
 name = "exacly-action"
-version = "0.7.0rc4"
+version = "0.7.0"
 source = { virtual = "." }
 dependencies = [
     { name = "exacly" },
@@ -118,7 +118,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "exacly", specifier = "==0.6.0rc4" }]
+requires-dist = [{ name = "exacly", specifier = "==0.6.0" }]
 
 [package.metadata.requires-dev]
 dev = [
