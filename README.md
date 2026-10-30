@@ -110,6 +110,20 @@ The installed `exacly evidence package` and `exacly evidence propose-policy gith
 
 The moving `v0` tag is promoted as part of stable publication. Use `v0.7.0` to keep a workflow on this exact action release.
 
+### Candidate trial
+
+To trial the package candidate through the action, select the exact candidate tag:
+
+```yaml
+- uses: whiteredhouse/exacly-action@v0.8.0-rc.1
+  with:
+    model: spec/exacly
+```
+
+This action candidate pins `exacly==0.7.0rc1` in its lockfile. The modes remain `check`, `plan` and `gate`, with the same inputs. The package's additional automation commands remain CLI features. See the [package candidate release notes](https://github.com/whiteredhouse/exacly/releases/tag/python-v0.7.0rc1) for their scope, runtime requirements and compatibility guidance.
+
+The moving `v0` tag remains the stable channel; select the exact candidate tag for the trial.
+
 ### Upgrading to 0.6.0
 
 This release runs exacly 0.5.0. When that observer sees a mix of passing and skipped selected test cases, it writes `inconclusive` verification with evidence and a reason naming skipped cases. A verification gate returns `unknown` and exits 1 for that result. Failures still take precedence, all-skipped selections remain `not_checked`, and all-pass selections can still satisfy readiness. Pytest expected failures (`xfail`) are skipped outcomes in JUnit reports, so broad bindings that include them may now block readiness.
