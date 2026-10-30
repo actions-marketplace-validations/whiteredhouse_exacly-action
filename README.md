@@ -112,7 +112,7 @@ The moving `v0` tag is promoted as part of stable publication. Use `v0.7.0` to k
 
 ### Candidate trial
 
-To trial the package candidate through the action, select the exact candidate tag:
+For an opt-in trial, select the exact candidate tag:
 
 ```yaml
 - uses: whiteredhouse/exacly-action@v0.8.0-rc.1
@@ -120,9 +120,7 @@ To trial the package candidate through the action, select the exact candidate ta
     model: spec/exacly
 ```
 
-This action candidate pins `exacly==0.7.0rc1` in its lockfile. The modes remain `check`, `plan` and `gate`, with the same inputs. The package's additional automation commands remain CLI features. See the [package candidate release notes](https://github.com/whiteredhouse/exacly/releases/tag/python-v0.7.0rc1) for their scope, runtime requirements and compatibility guidance.
-
-The moving `v0` tag remains the stable channel; select the exact candidate tag for the trial.
+This candidate uses `exacly==0.7.0rc1`. See the [package candidate release notes](https://github.com/whiteredhouse/exacly/releases/tag/python-v0.7.0rc1) for scope, runtime requirements and compatibility guidance.
 
 ### Upgrading to 0.6.0
 
