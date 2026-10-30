@@ -52,7 +52,7 @@ CI runs `check` and `gate` on GitHub-hosted Linux and macOS runners, and `plan` 
 Gate mode is available from `v0.5.0`. Earlier action releases support `check` and `plan` only.
 
 ```yaml
-- uses: whiteredhouse/exacly-action@v0.6.0
+- uses: whiteredhouse/exacly-action@v0.7.0
   with:
     mode: gate
     model: |
@@ -80,7 +80,7 @@ The action reads supplied observations; it does not run tests, refresh state, de
 
 ## Versions
 
-Pin a tag: `v0.6.0`, or the moving `v0` for the latest 0.x release. Each action release runs one release of the `exacly` package, pinned in [`pyproject.toml`](pyproject.toml) and installed from [`uv.lock`](uv.lock), so a release always validates the same way.
+Pin an exact stable tag, or use the moving `v0` for the latest stable 0.x release. Each action release runs one release of the `exacly` package, pinned in [`pyproject.toml`](pyproject.toml) and installed from [`uv.lock`](uv.lock), so a release always validates the same way.
 
 | Action | exacly | Spec versions it reads |
 | --- | --- | --- |
@@ -90,6 +90,25 @@ Pin a tag: `v0.6.0`, or the moving `v0` for the latest 0.x release. Each action 
 | 0.4.0 | 0.4.0 | 0.1, 0.2 |
 | 0.5.0: opt-in readiness gates | 0.4.0 | 0.1, 0.2 |
 | 0.6.0: conservative case-bound verification | 0.5.0 | 0.1, 0.2 |
+| 0.7.0: operator-controlled verification tooling | 0.6.0 | 0.1, 0.2 |
+
+### Using 0.7.0
+
+Action `v0.7.0` runs `exacly==0.6.0`. Action and package versions are independent. Select the action's exact stable tag:
+
+```yaml
+- uses: whiteredhouse/exacly-action@v0.7.0
+  with:
+    model: spec/exacly
+```
+
+The available modes remain `check`, `plan` and `gate`, with the same inputs. The action's `plan` mode runs `exacly view plan` for a pull request's model changes. The package's verification planner, evidence admission, reconciliation, execution ledger and local completion commands are available through the [CLI](https://github.com/whiteredhouse/exacly/blob/python-v0.6.0/python/README.md), without new action modes in this release.
+
+Package `0.6.0` initializes new execution ledgers in completion-ready schema version 2 and creates admission bundle files with mode `0600` inside a `0700` directory. Existing ledgers keep their format, and indexed version-4 activation remains explicit. These changes apply to the CLI; the action's validation modes do not create ledgers or admission bundles.
+
+The installed `exacly evidence package` and `exacly evidence propose-policy github-actions` commands prepare producer bundles and candidate trust policies. Review and approve generated policies independently before admission. See the [package release notes](https://github.com/whiteredhouse/exacly/releases/tag/python-v0.6.0) for receipt formats and ledger upgrade guidance.
+
+The moving `v0` tag is promoted as part of stable publication. Use `v0.7.0` to keep a workflow on this exact action release.
 
 ### Upgrading to 0.6.0
 
